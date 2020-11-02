@@ -1,9 +1,15 @@
+'''
+	Code submission #1
+	@author: Gene/Ziying Cheng
+
+'''
 
 import numpy as np
 import pandas as pd
 import geopandas as gpd
 import json
 from math import cos, sin, pi
+import open3d as o3d
 
 # Step 1: Land Mask Data ------------------------------
 # create 1-D arrays for lon and lat
@@ -47,7 +53,6 @@ land.to_file('land.geojson', driver='GeoJSON')
 ####
 
 
-
 # Step 3: Model Development -----------------------------
 # convert the coordinates from lon/lat to x/y/z
 def coords_conversion(lon, lat, num):
@@ -65,6 +70,44 @@ def coords_conversion(lon, lat, num):
     z = O[2] + S * R * sin(rad_lat)
 
     return (x, y, z)
+
+# write ply file for 3D model
+def model(path):
+    with open(path, 'w') as fw:
+    # write headers with required format 
+        fw.write('ply\nformat ascii 1.0\n')
+        fw.write('element vertex %d\n' % len(coords))
+        fw.write('property float x\n')
+        fw.write('property float y\n')
+        fw.write('property float z\n')
+
+        if len(colors) == len(coords):
+            fw.write('property uchar red\n')
+            fw.write('property uchar green\n')
+            fw.write('property uchar blue\n')
+
+        fw.write('end_header\n')
+        
+        # write data
+        if len(colors) == len(coords):
+            for coord, color in zip(coords, colors):
+                fw.write("%f %f %f %d %d %d\n" % (
+                    coord[0],
+                    coord[1],
+                    coord[2],
+                    color[0],
+                    color[1],
+                    color[2]
+                    ))
+        else:
+            for coord in coords:
+                fw.write("%f %f %f\n" % (
+                    coord[0],
+                    coord[1],
+                    coord[2]
+                    ))
+        print('##### PLY model created #####')
+
 
 # read geojson and store in the variable 'data'
 with open('land.geojson') as f:
@@ -89,3 +132,16 @@ colors = []
 # store coord and color for each point 
 coords.extend([ coords_conversion(lat, lon, 0) for lon, lat in zip(lons, lats) ]) 
 colors.extend([ (192,192,192) for x in lats ])
+
+# create land(base) model
+model('model_py.ply')
+
+# read and display model
+PC = o3d.io.read_point_cloud('model_py.ply')
+o3d.visualization.draw_geometries([PC])
+
+####
+# Step 4: Model Advanced Properties
+#
+#
+####

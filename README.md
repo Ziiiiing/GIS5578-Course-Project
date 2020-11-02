@@ -1,5 +1,6 @@
-# GIS5578-Course-Project
-GIS5578-FALL2020: Course Project From Gene/Ziying Cheng
+# 3D Point Cloud Model of COVID-19
+
+This project will create a 3D point cloud visualization model of the COVID-19 pandemic. The model will focus on modeling the global spatial patterns along with the statistics of different types of live cases for each country by thousands or even millions of georeferenced points.
 
 
 ### Step 1: Generate Land Mask Points
@@ -21,3 +22,7 @@ GIS5578-FALL2020: Course Project From Gene/Ziying Cheng
 2. Convert the longitude/latitude to Cartesian Coordinates X/Y/Z. Since the land mask points do not have to represent any covid-19 data, thus the `num` should be `0` and the `z` value is set to the distance from the land to the earth origin.
 
 3. Extend the Cartesian Coordinates into `coords` list and also extended a default color into `colors` list according to the PLY model format.
+
+### Step 3: Model Development (Land Mask Points)
+1. Write the PLY file to create the 3D model for land mask points.
+2. Use open3d library to read the ply file and display 3D model locally.
