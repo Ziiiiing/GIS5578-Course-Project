@@ -2,7 +2,10 @@
 import numpy as np
 import pandas as pd
 import geopandas as gpd
+import json
+from math import cos, sin, pi
 
+# Step 1: Land Mask Data ------------------------------
 # create 1-D arrays for lon and lat
 grid_lons = np.arange(-180, 180, 0.5)
 grid_lats = np.arange(-90, 90, 0.5)
@@ -34,3 +37,55 @@ land = land.drop(columns=['lon', 'lat', 'index_right'])
 
 # write geojson
 land.to_file('land.geojson', driver='GeoJSON')
+
+
+####
+# Step 2: COVID-19 Data ---------------------------------
+# Request live data by countries with all cases from API
+# Spatial Join with land points to correct lon/lat
+# Store in local JSON file
+####
+
+
+
+# Step 3: Model Development -----------------------------
+# convert the coordinates from lon/lat to x/y/z
+def coords_conversion(lon, lat, num):
+    O = [0, 0, 0]  # center
+    R = 6400       # radius
+    S = 0.01       # scale
+    # D = 3        # height exaggeration
+    
+    # calculate the radian of the sphere
+    rad_lat, rad_lon = lat * pi / 180, lon * pi / 180
+
+    # calculate the cartesian coordiantes of each point
+    x = O[0] + S * R * cos(rad_lat) * cos(rad_lon)
+    y = O[1] + S * R * cos(rad_lat) * sin(rad_lon)
+    z = O[2] + S * R * sin(rad_lat)
+
+    return (x, y, z)
+
+# read geojson and store in the variable 'data'
+with open('land.geojson') as f:
+    data = json.load(f)
+
+# extract values of the 'features' key
+features = data['features']
+
+# retrieve lons/lats from each feature
+lons = []
+lats = []
+for feature in features:
+    geometry = feature['geometry']
+    coord = geometry['coordinates']
+    lats.append(coord[0])
+    lons.append(coord[1])
+
+
+coords = []
+colors = []
+
+# store coord and color for each point 
+coords.extend([ coords_conversion(lat, lon, 0) for lon, lat in zip(lons, lats) ]) 
+colors.extend([ (192,192,192) for x in lats ])

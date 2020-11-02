@@ -14,3 +14,10 @@ GIS5578-FALL2020: Course Project From Gene/Ziying Cheng
 5. Perform a `spatial join` between the grid points and the polygon, and make each point have the values for `Country Name`, `ISO` and location information.
 
 6. Write the spatial join result to a GeoJSON file and save locally.
+
+### Step 2: Coordinate Conversion
+1. Read the `land.geojson` and extract the geometry information for land mask points.
+
+2. Convert the longitude/latitude to Cartesian Coordinates X/Y/Z. Since the land mask points do not have to represent any covid-19 data, thus the `num` should be `0` and the `z` value is set to the distance from the land to the earth origin.
+
+3. Extend the Cartesian Coordinates into `coords` list and also extended a default color into `colors` list according to the PLY model format.
