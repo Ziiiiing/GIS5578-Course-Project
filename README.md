@@ -25,4 +25,5 @@ This project will create a 3D point cloud visualization model of the COVID-19 pa
 
 ### Step 3: Model Development (Land Mask Points)
 1. Write the PLY file to create the 3D model for land mask points.
+
 2. Use open3d library to read the ply file and display 3D model locally.
