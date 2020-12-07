@@ -37,7 +37,7 @@ Check python module/package installation. Uncomment the `pip` statement to insta
 4. Loop `iso_slugs` dict and request each country url. Modify the response data by removing usless keys and adding other keys. Store the modified data in local folder `data_by_country` individually. Also provide the request date on the filename.
 
 
-### Step 3: Model Development
+### STEP3: MODEL DEVELOPMENT
 1. Read local COVID-19 data and store in `covid_coords` list. The list involves the coordinates(lon/lat) and case(e.g. latest active cases) for each georeforenced point.
 
 2. Convert the coordinates from Geodetic WGS84(lon/lat) to 3-dimensional Geocentric Cartesian Coordinates(x/y/z). Points are set on the surface of the globe.
